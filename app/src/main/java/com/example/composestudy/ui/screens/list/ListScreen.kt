@@ -1,6 +1,5 @@
 package com.example.composestudy.ui.screens.list
 
-import android.content.res.Configuration
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -8,19 +7,29 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.composestudy.R
 import com.example.composestudy.ui.theme.fabBackgroundColor
+import com.example.composestudy.ui.viewmodel.SharedViewModel
+import com.example.composestudy.util.SearchAppBarState
 
 @Composable
 fun ListScreen(
-    navigationToTaskScreen: (taskId: Int) -> Unit
+    navigationToTaskScreen: (taskId: Int) -> Unit,
+    sharedViewModel: SharedViewModel
 ) {
+    val searchAppBarState: SearchAppBarState by sharedViewModel.searchAppBarState
+    val searchTextState: String by sharedViewModel.searchTextState
+
     Scaffold(
         topBar = {
-            ListAppBar()
+            ListAppBar(
+                sharedViewModel = sharedViewModel,
+                searchAppBarState = searchAppBarState,
+                searchTextState = searchTextState
+            )
         },
         content = {},
         floatingActionButton = {
@@ -45,14 +54,4 @@ fun ListFab(
             tint = Color.White
         )
     }
-}
-
-@Composable
-@Preview(
-    name = "Dark Mode",
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    showBackground = true
-)
-private fun ListScreenPreview() {
-    ListScreen(navigationToTaskScreen = {})
 }
