@@ -36,6 +36,24 @@ class SharedViewModel @Inject constructor(
         mutableStateOf(SearchAppBarState.CLOSED)
     val searchTextState: MutableState<String> = mutableStateOf("")
 
+    private val _searchedTasks = MutableStateFlow<RequestState<List<ToDoTask>>>(RequestState.Idle)
+    val searchedTask: StateFlow<RequestState<List<ToDoTask>>> = _searchedTasks
+
+    fun searchDatabase(searchQuery: String) {
+        _searchedTasks.value = RequestState.Loading
+        try {
+            viewModelScope.launch {
+                repository.searchDatabase(searchQuery = "%$searchQuery%")
+                    .collect { searchedTasks ->
+                        _searchedTasks.value = RequestState.Success(searchedTasks)
+                    }
+            }
+        } catch (e: Exception) {
+            _searchedTasks.value = RequestState.Error(e)
+        }
+        searchAppBarState.value = SearchAppBarState.TRIGGERED
+    }
+
     private val _allTasks = MutableStateFlow<RequestState<List<ToDoTask>>>(RequestState.Idle)
     val allTasks: StateFlow<RequestState<List<ToDoTask>>> = _allTasks
 
@@ -73,6 +91,7 @@ class SharedViewModel @Inject constructor(
             )
             repository.addTask(toDoTask)
         }
+        searchAppBarState.value = SearchAppBarState.CLOSED
     }
 
     private fun updateTask() {
@@ -87,6 +106,24 @@ class SharedViewModel @Inject constructor(
         }
     }
 
+    private fun deleteTask() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val toDoTask = ToDoTask(
+                id = id.value,
+                title = title.value,
+                description = description.value,
+                priority = priority.value
+            )
+            repository.deleteTask(toDoTask)
+        }
+    }
+
+    private fun deleteAllTasks() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllTasks()
+        }
+    }
+
     fun handleDatabaseActions(action: Action) {
         when(action) {
             Action.ADD -> {
@@ -95,9 +132,15 @@ class SharedViewModel @Inject constructor(
             Action.UPDATE -> {
                 updateTask()
             }
-            Action.DELETE -> {}
-            Action.DELETE_ALL -> {}
-            Action.UNDO -> {}
+            Action.DELETE -> {
+                deleteTask()
+            }
+            Action.DELETE_ALL -> {
+                deleteAllTasks()
+            }
+            Action.UNDO -> {
+                addTask()
+            }
             else -> {
 
             }
