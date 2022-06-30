@@ -2,7 +2,7 @@
     <string name="app_name">ComposeStudy</string>
 
     <string name="add_button">Add Button</string>
-
+    <string name="to_do_logo">TO-DO</string>
     <string name="add_task">Add Task</string>
     <string name="drop_down_arrow_icon">DropDown Arrow Icon</string>
     <string name="update_icon">Update Icon</string>

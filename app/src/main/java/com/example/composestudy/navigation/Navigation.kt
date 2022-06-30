@@ -1,15 +1,18 @@
 package com.example.composestudy.navigation
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
 import com.example.composestudy.navigation.destination.listComposable
+import com.example.composestudy.navigation.destination.splashComposable
 import com.example.composestudy.navigation.destination.taskComposable
 import com.example.composestudy.ui.viewmodel.SharedViewModel
-import com.example.composestudy.util.Constants.LIST_SCREEN
+import com.example.composestudy.util.Constants.SPLASH_SCREEN
+import com.google.accompanist.navigation.animation.AnimatedNavHost
 
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
 fun SetupNavigation(
@@ -20,16 +23,19 @@ fun SetupNavigation(
         Screens(navController)
     }
 
-    NavHost(
+    AnimatedNavHost(
         navController = navController,
-        startDestination = LIST_SCREEN
+        startDestination = SPLASH_SCREEN
     ) {
+        splashComposable(
+            navigateToTaskScreen = screen.splash
+        )
         listComposable(
-            navigateToTaskScreen = screen.task,
+            navigateToTaskScreen = screen.list,
             sharedViewModel = sharedViewModel
         )
         taskComposable(
-            navigateToListScreen = screen.list,
+            navigateToListScreen = screen.task,
             sharedViewModel = sharedViewModel
         )
     }
