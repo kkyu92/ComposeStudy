@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composestudy.R
@@ -51,6 +52,11 @@ fun SplashScreen(
         navigateToListScreen()
     }
 
+    Splash(offsetState, alphaSate)
+}
+
+@Composable
+fun Splash(offsetState: Dp, alphaSate: Float) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -83,8 +89,6 @@ fun getLogo(): Int {
 @Preview
 private fun SplashScreenPreview() {
     ComposeStudyTheme(true) {
-        SplashScreen(
-            navigateToListScreen = {}
-        )
+        Splash(offsetState = 0.dp, alphaSate = 1f)
     }
 }

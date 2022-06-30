@@ -33,6 +33,7 @@ import com.example.composestudy.util.SearchAppBarState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
 fun ListContent(
@@ -83,6 +84,7 @@ fun ListContent(
     }
 }
 
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
 fun HandleListContent(
@@ -101,7 +103,7 @@ fun HandleListContent(
     }
 }
 
-@SuppressLint("CoroutineCreationDuringComposition")
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
 fun DisplayTasks(
